@@ -1,23 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class GroundManager : MonoBehaviour
+public class GroundManager : SingletonMonoBehavior<GroundManager>
 {
     public Vector2Int playerPos;
-    public Vector2Int goalPos;
+    //public Vector2Int goalPos;
     public Dictionary<Vector2Int, int> map = new Dictionary<Vector2Int, int>();
+
+    internal void OnTouch(Vector3 position)
+    {
+        Vector2Int findPos = new Vector2Int((int)position.x, (int)position.z);
+        FindPath(findPos);
+;    }
+
     public List<int> passableValues = new List<int>();// 갈 수 있는 지역
 
     public Transform player;
+
+    void FindPath(Vector2Int goalPos)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FindPathCo(goalPos));
+    }
     public Transform goal;
 
-    [ContextMenu("길찾기 테스트")]
-    void Start()
-    {
-        StartCoroutine(FindPathCo());    
-    }
-    IEnumerator FindPathCo()
+    //[ContextMenu("길찾기 테스트")]
+
+    IEnumerator FindPathCo(Vector2Int goalPos)
     {
         passableValues = new List<int>();
         passableValues.Add((int)BlockType.Walkable);
