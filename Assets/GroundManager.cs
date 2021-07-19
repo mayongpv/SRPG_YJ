@@ -53,6 +53,7 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
             Debug.Log("길이 없다");
         else
         {
+            Player.SelectPlayer.PlayAnimation("Walk");
             foreach (var item in path)
             {
                 Vector3 playerNewPos = new Vector3(item.x, 0, item.y);
@@ -60,6 +61,7 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
                 player.position = playerNewPos;
                 yield return new WaitForSeconds(0.5f);
             }
+            Player.SelectPlayer.PlayAnimation("Idle");
         }
 
         PathFinding2D.find4(playerPos, goalPos, map, passableValues);
