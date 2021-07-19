@@ -7,28 +7,21 @@ using DG.Tweening;
 public class GroundManager : SingletonMonoBehavior<GroundManager>
 {
     public Vector2Int playerPos;
-    //public Vector2Int goalPos;
     public Dictionary<Vector2Int, int> map = new Dictionary<Vector2Int, int>();
-
+    public List<int> passableValues = new List<int>();// 갈 수 있는 지역
+    public Transform player;
     internal void OnTouch(Vector3 position)
     {
         Vector2Int findPos = new Vector2Int((int)position.x, (int)position.z);
         FindPath(findPos);
-        ;
     }
 
-    public List<int> passableValues = new List<int>();// 갈 수 있는 지역
-
-    public Transform player;
 
     void FindPath(Vector2Int goalPos)
     {
         StopAllCoroutines();
         StartCoroutine(FindPathCo(goalPos));
     }
-    public Transform goal;
-
-    //[ContextMenu("길찾기 테스트")]
 
     IEnumerator FindPathCo(Vector2Int goalPos)
     {
@@ -42,8 +35,8 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
         foreach (var item in blockInfos)
         {
             var pos = item.transform.position;
-            Vector2Int inPos = new Vector2Int((int)pos.x, (int)pos.z);
-            map[inPos] = (int)item.blockType;
+            Vector2Int intPos = new Vector2Int((int)pos.x, (int)pos.z);
+            map[intPos] = (int)item.blockType;
 
         }
         playerPos.x = (int)player.position.x;
@@ -62,15 +55,15 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
                 Vector3 playerNewPos = new Vector3(item.x, 0, item.y);
                 player.LookAt(playerNewPos);
                 //player.position = playerNewPos;
-                player.DOMove(playerNewPos, moveTImePerUnit).SetEase(moveEase);
-                yield return new WaitForSeconds(moveTImePerUnit);
+                player.DOMove(playerNewPos, moveTimePerUnit).SetEase(moveEase);
+                yield return new WaitForSeconds(moveTimePerUnit);
             }
             Player.SelectPlayer.PlayAnimation("Idle");
             FollowTarget.Instance.SetTarget(null);
         }
     }
        public Ease moveEase = Ease.InBounce;
-    public float moveTImePerUnit = 0.3f;
+    public float moveTimePerUnit = 0.3f;
 
     }
 
