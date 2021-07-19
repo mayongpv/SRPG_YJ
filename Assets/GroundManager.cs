@@ -46,8 +46,7 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
         }
         playerPos.x = (int)player.position.x;
         playerPos.y= (int)player.position.z;
-        goalPos.x = (int)goal.position.x;
-        goalPos.y = (int)goal.position.z;
+
 
         List<Vector2Int> path = PathFinding2D.find4(playerPos, goalPos, map, passableValues);
         if (path.Count == 0)
@@ -57,6 +56,7 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
             foreach (var item in path)
             {
                 Vector3 playerNewPos = new Vector3(item.x, 0, item.y);
+                player.LookAt(playerNewPos);
                 player.position = playerNewPos;
                 yield return new WaitForSeconds(0.5f);
             }
