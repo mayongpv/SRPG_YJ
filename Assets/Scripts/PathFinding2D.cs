@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -29,57 +29,6 @@ public static class PathFinding2D
         return astar(from, to, map, passableValues, getDistance, getNeighbors);
     }
 
-    /**
-     * find a path in hexagonal grid tilemaps (when grid rows are staggered with each other)
-     */
-    public static List<Vector2Int> find6X(Vector2Int from, Vector2Int to, Dictionary<Vector2Int, int> map, List<int> passableValues)
-    {
-        Func<Vector2Int, Vector2Int, float> getDistance = delegate (Vector2Int a, Vector2Int b)
-        {
-            float xDistance = Mathf.Abs(a.x - b.x);
-            float yDistance = Mathf.Abs(a.y - b.y) * Mathf.Sqrt(3);
-            return xDistance * xDistance + yDistance * yDistance;
-        };
-        Func<Vector2Int, List<Vector2Int>> getNeighbors = delegate (Vector2Int pos)
-        {
-            var neighbors = new List<Vector2Int>();
-            neighbors.Add(new Vector2Int(pos.x + 1, pos.y + 1));
-            neighbors.Add(new Vector2Int(pos.x - 1, pos.y + 1));
-            neighbors.Add(new Vector2Int(pos.x + 1, pos.y - 1));
-            neighbors.Add(new Vector2Int(pos.x - 1, pos.y - 1));
-            neighbors.Add(new Vector2Int(pos.x - 2, pos.y));
-            neighbors.Add(new Vector2Int(pos.x + 2, pos.y));
-            return neighbors;
-        };
-        return astar(from, to, map, passableValues, getDistance, getNeighbors);
-    }
-
-    /**
-     * find a path in hexagonal grid tilemaps (when grid columns are staggered with each other)
-     */
-    public static List<Vector2Int> find6Y(Vector2Int from, Vector2Int to, Dictionary<Vector2Int, int> map, List<int> passableValues)
-    {
-        Func<Vector2Int, Vector2Int, float> getDistance = delegate (Vector2Int a, Vector2Int b)
-        {
-            float xDistance = Mathf.Abs(a.x - b.x) * Mathf.Sqrt(3);
-            float yDistance = Mathf.Abs(a.y - b.y);
-            return xDistance * xDistance + yDistance * yDistance;
-        };
-        Func<Vector2Int, List<Vector2Int>> getNeighbors = delegate (Vector2Int pos)
-        {
-            var neighbors = new List<Vector2Int>();
-            neighbors.Add(new Vector2Int(pos.x + 1, pos.y + 1));
-            neighbors.Add(new Vector2Int(pos.x - 1, pos.y + 1));
-            neighbors.Add(new Vector2Int(pos.x + 1, pos.y - 1));
-            neighbors.Add(new Vector2Int(pos.x - 1, pos.y - 1));
-            neighbors.Add(new Vector2Int(pos.x, pos.y - 2));
-            neighbors.Add(new Vector2Int(pos.x, pos.y + 2));
-            return neighbors;
-        };
-        return astar(from, to, map, passableValues, getDistance, getNeighbors);
-    }
-
-
     static List<Vector2Int> astar(Vector2Int from, Vector2Int to, Dictionary<Vector2Int, int> map, List<int> passableValues,
                       Func<Vector2Int, Vector2Int, float> getDistance, Func<Vector2Int, List<Vector2Int>> getNeighbors)
     {
@@ -97,7 +46,7 @@ public static class PathFinding2D
             {
                 result.Add(finalNode.pos);
                 finalNode = finalNode.preNode;
-            } 
+            }
         }
         result.Reverse();
         return result;
@@ -107,7 +56,8 @@ public static class PathFinding2D
                          Dictionary<Vector2Int, int> map, Vector2Int to, out Node finalNode, List<int> passableValues,
                       Func<Vector2Int, Vector2Int, float> getDistance, Func<Vector2Int, List<Vector2Int>> getNeighbors)
     {
-        if (currentNode == null) {
+        if (currentNode == null)
+        {
             finalNode = null;
             return false;
         }
@@ -147,7 +97,7 @@ public static class PathFinding2D
         }
     }
 
-    class Node:IComparable
+    class Node : IComparable
     {
         public Node preNode;
         public Vector2Int pos;
@@ -171,7 +121,8 @@ public static class PathFinding2D
 
             if (temp == null) return 1;
 
-            if (Mathf.Abs(this.fScore - temp.fScore) < 0.01f) {
+            if (Mathf.Abs(this.fScore - temp.fScore) < 0.01f)
+            {
                 return this.fScore > temp.fScore ? 1 : -1;
             }
 
