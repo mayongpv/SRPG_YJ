@@ -8219,6 +8219,8 @@ MonoBehaviour:
   passableValues: 
   player: {fileID: 350318879}
   goal: {fileID: 0}
+  moveEase: 1
+  moveTImePerUnit: 0.3
 --- !u!1001 &629338683
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 public class GroundManager : SingletonMonoBehavior<GroundManager>
 {
@@ -13,7 +14,8 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
     {
         Vector2Int findPos = new Vector2Int((int)position.x, (int)position.z);
         FindPath(findPos);
-;    }
+        ;
+    }
 
     public List<int> passableValues = new List<int>();// 갈 수 있는 지역
 
@@ -45,7 +47,7 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
 
         }
         playerPos.x = (int)player.position.x;
-        playerPos.y= (int)player.position.z;
+        playerPos.y = (int)player.position.z;
 
 
         List<Vector2Int> path = PathFinding2D.find4(playerPos, goalPos, map, passableValues);
@@ -58,14 +60,15 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
             {
                 Vector3 playerNewPos = new Vector3(item.x, 0, item.y);
                 player.LookAt(playerNewPos);
-                player.position = playerNewPos;
-                yield return new WaitForSeconds(0.5f);
+                //player.position = playerNewPos;
+                player.DOMove(playerNewPos, moveTImePerUnit).SetEase(moveEase);
+                yield return new WaitForSeconds(moveTImePerUnit);
             }
             Player.SelectPlayer.PlayAnimation("Idle");
         }
+    }
+       public Ease moveEase = Ease.InBounce;
+    public float moveTImePerUnit = 0.3f;
 
-        PathFinding2D.find4(playerPos, goalPos, map, passableValues);
     }
 
-
-}
