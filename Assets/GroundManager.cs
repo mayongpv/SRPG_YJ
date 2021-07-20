@@ -7,15 +7,16 @@ using DG.Tweening;
 public class GroundManager : SingletonMonoBehavior<GroundManager>
 {
     public Vector2Int playerPos; //player 위치 
-    public Dictionary<Vector2Int, int> map = new Dictionary<Vector2Int, int>();
-    public List<int> passableValues = new List<int>();// 갈 수 있는 지역 //1.
+    public Dictionary<Vector2Int, BlockType> map = new Dictionary<Vector2Int, BlockType>();
+    //public List<int> passableValues = new List<int>();// 갈 수 있는 지역 //1.
+    public BlockType passableValues = BlockType.Walkable | BlockType.Water;
     public Transform player;
 
     //context 메뉴 ; 코르틴 실행 안됨 
 
     internal void OnTouch(Vector3 position)
     {
-        Vector2Int findPos = new Vector2Int((int)position.x, (int)position.z);
+        Vector2Int findPos = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
         FindPath(findPos);
     }
 
@@ -28,8 +29,8 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
 
     IEnumerator FindPathCo(Vector2Int goalPos)
     {
-        passableValues = new List<int>();
-        passableValues.Add((int)BlockType.Walkable); //3. 샘플에서 값 넣는거 그대로 함
+        playerPos.x = Mathf.RoundToInt(player.position.x);
+        playerPos.x = Mathf.RoundToInt(player.position.z); //3. 샘플에서 값 넣는거 그대로 함
 
         //자식의 모든 블록인포 찾자
         var blockInfos = GetComponentsInChildren<BlockInfo>(); // 자식들에서 블록 정보를 찾는다 
@@ -40,12 +41,12 @@ public class GroundManager : SingletonMonoBehavior<GroundManager>
         {
             var pos = item.transform.position; //아이템들의 위치값 x랑 z 값을 쓸거임
             Vector2Int intPos = new Vector2Int((int) pos.x, (int)pos.z); //(int) 써준거는 강제로 변환해준 것)
-            map[intPos] = (int)item.blockType; //맵에 
+            map[intPos] = item.blockType; //맵에 
             //intPos가 KEY가 된다. 딕셔너리 : 앞부분키, 뒷부분 value <= 이 땅의 속성, 즉 블록타입 / 이걸 int형으로 넣어줌
             //이렇게 해서 Map 정보 초기화가 끝났다. 
         }
-        playerPos.x = (int)player.position.x;
-        playerPos.y = (int)player.position.z; // 따로 써준 이유 : 우리가 쓰려는 Vecor2 값에 x, y만 있어서 y값에 z 값을 넣어줄거임
+        playerPos.x = Mathf.RoundToInt(player.position.x);
+        playerPos.y = Mathf.RoundToInt(player.position.z); // 따로 써준 이유 : 우리가 쓰려는 Vecor2 값에 x, y만 있어서 y값에 z 값을 넣어줄거임
 
 
         List<Vector2Int> path = PathFinding2D.find4(playerPos, goalPos, map, passableValues); //2.
