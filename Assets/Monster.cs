@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-
+    Animator animator;
 
     void Update()
     {

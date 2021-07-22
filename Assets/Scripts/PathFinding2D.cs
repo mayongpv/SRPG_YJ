@@ -76,8 +76,15 @@ public static class PathFinding2D
                 findTemp(openList, currentNode, item, to, getDistance);
             }
         }
-        var next = openList.FindAll(obj => obj.open).Min();
-        return findDest(next, openList, map, to, out finalNode, passableValues, getDistance, getNeighbors);
+        /*1. 열려있는 노드의 주변 노드를 모은다.
+         * 2. 열려있는 노드 중에서 다장 뎁스가 낮은 것들의 주변을 모두 모은다.
+         * 3. 열려있는 노드 중에 목표지점까지 예상거리가 가장 작은 것 부터 계산한다.(이건 A*)
+        */
+        //오픈 리스트 중에서 가장 작은애, 즉 이동 거리와 횟수가 가장 적은애를 next라는 변수로 히턴해서 사용하겠다 - Min 함수 / 
+        var next = openList.FindAll(obj => obj.open).Min(); 
+        return findDest(next, openList, map, to, out finalNode, passableValues, getDistance, getNeighbors); 
+        //open List; : 아직 검사 안한 애들 - 아직open되어 있는 애들
+
     }
 
     static void findTemp(List<Node> openList, Node currentNode, Vector2Int from, Vector2Int to, Func<Vector2Int, Vector2Int, float> getDistance)
@@ -99,11 +106,11 @@ public static class PathFinding2D
 
     class Node : IComparable
     {
-        public Node preNode;
-        public Vector2Int pos;
-        public float fScore;
-        public float hScore;
-        public float gScore;
+        public Node preNode; // 바로 전의 Node
+        public Vector2Int pos; // 자기 위치
+        public float fScore; // h + g
+        public float hScore; //예상거리
+        public float gScore; //Step, 몇번째 이동인지
         public bool open = true;
 
         public Node(Node prePos, Vector2Int pos, float hScore, float gScore)
