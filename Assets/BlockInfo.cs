@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-//[Flags] //,evrything 생김 - 여러개 선택 가능
-
-
 
 public enum BlockType // 4. 샘플에서 추출 - 우리가 정한 것- - 갈 수 있는 지역과 없는 지역 구분하기 위해 
 { 
-    // 비트연산 - > 메모리가 겹치지 않게 하기 위해 
+    // 비트연산 - > 메모리가 겹치지 않게 하기 위해 , 중복으로 선택이 가능하다. 
     None  =       0,
     Player =      1<<0,
     Monster =   1 << 1,
@@ -38,6 +35,22 @@ public class BlockInfo : MonoBehaviour // 갈 수 있는지역, 없는 지역을
         }
         Player.SelectPlayer.Ontouch(transform.position);
     }
+    private void SelectPlayer()
+    {
+
+        Player player = (Player)actor;
+
+        if (Player.CompleteTurn)
+        {
+            CenterNotifyUI.Instance;
+
+
+        }
+    
+    }
+
+
+
 
 
     string debugTextPrefab = "DebugTextPrefab";
